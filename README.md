@@ -6,9 +6,7 @@ A fast, personalized tax planning and optimization engine for Indian taxpayers.
 Taxly is a responsive, front-end web application designed to simplify tax planning. It provides users with a quick tax estimate in under 10 seconds and offers a comprehensive dashboard to track potential savings, compare tax regimes, and optimize deductions throughout the financial year.
 
 ## Live Demo
-[View the Live Web App Here]((https://toshika-kamble.github.io/Taxly-app/)) 
-
-*(Note: If you named your repository something other than `taxly-app`, make sure to update the link above!)*
+[View the Live Web App Here](https://toshika-kamble.github.io/Taxly-app/)
 
 ## Key Features
 * **Quick Estimator:** Calculates base tax liability instantly using a dynamic slider.
