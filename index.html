@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taxly by Toshika Kamble</title>
+
+    <!-- Fonts: Inter for that premium app feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Embedded Styles -->
+    <style>
+        /* Theme Variables & Design System */
+        :root {
+            --color-primary: #5B4CF5;
+            --color-primary-hover: #4839D6;
+            --color-primary-light: #EEECFF;
+            --color-bg: #F7F8FC;
+            --color-card-bg: #FFFFFF;
+            --color-text-main: #1F2A44;
+            --color-text-muted: #64748B;
+            --color-success: #2FAE8E;
+            --color-warning: #F4B740;
+            --color-danger: #EF4444;
+            --color-border: #E2E8F0;
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --radius-sm: 0.25rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 1rem;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--color-bg);
+            color: var(--color-text-main);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: inherit; text-decoration: none; }
+        button { font-family: inherit; cursor: pointer; border: none; background: none; }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .gap-4 { gap: 1rem; }
+        .gap-6 { gap: 1.5rem; }
+        .hidden { display: none !important; }
+        .w-full { width: 100%; }
+        .text-center { text-align: center; }
+        .font-bold { font-weight: 700; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mt-4 { margin-top: 1rem; }
+        .text-sm { font-size: 0.875rem; }
+        .text-xs { font-size: 0.75rem; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.625rem 1.25rem;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary { background-color: var(--color-primary); color: white; }
+        .btn-primary:hover { background-color: var(--color-primary-hover); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+        .btn-white { background-color: white; color: var(--color-primary-hover); }
+        .btn-white:hover { background-color: var(--color-primary-light); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
+        .btn-outline { background: transparent; border: 2px solid var(--color-border); color: var(--color-text-muted); }
+        .btn-outline:hover { border-color: var(--color-text-main); color: var(--color-text-main); transform: translateY(-1px); }
+
+        .card {
+            background: var(--color-card-bg);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-border);
+            box-shadow: var(--shadow-sm);
+            padding: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .text-xl { font-size: 1.25rem; font-weight: 600; }
+        .text-2xl { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.025em; }
+        .text-3xl { font-size: 1.875rem; font-weight: 800; letter-spacing: -0.025em; }
+        .text-muted { color: var(--color-text-muted); }
+
+        .hero-card {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 1.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255,255,255,0.8);
+            max-width: 600px;
+            margin: 0 auto 3rem auto;
+            line-height: 1.6;
+        }
+
+        .form-group { margin-bottom: 1.5rem; text-align: left; }
+        .form-label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--color-text-main); font-size: 0.95rem; }
+        .form-control, .form-select {
+            width: 100%; padding: 0.75rem 1rem; font-size: 1rem; line-height: 1.5; color: var(--color-text-main);
+            background-color: white; border: 1px solid var(--color-border); border-radius: var(--radius-md); transition: border-color 0.2s, box-shadow 0.2s; font-family: inherit;
+        }
+        .form-control:focus, .form-select:focus { border-color: var(--color-primary); outline: 0; box-shadow: 0 0 0 3px var(--color-primary-light); }
+
+        .range-container { display: flex; flex-direction: column; gap: 0.5rem; }
+        .range-value { font-size: 1.25rem; font-weight: 700; color: var(--color-primary); }
+        
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 24px; width: 24px; border-radius: 50%; background: var(--color-primary); cursor: pointer; margin-top: -10px; box-shadow: var(--shadow-sm); border: 2px solid white; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; cursor: pointer; background: var(--color-border); border-radius: 4px; }
+        input[type=range]:focus::-webkit-slider-runnable-track { background: var(--color-primary-light); }
+
+        .stat-card { background: var(--color-card-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 1rem; text-align: center; }
+        .stat-label { color: var(--color-text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; font-weight: 600; }
+        .stat-value { font-size: 2rem; font-weight: 700; color: var(--color-text-main); }
+        .stat-value.highlight { color: var(--color-success); }
+
+        .score-container { display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 2rem 0; }
+        .circular-progress { position: relative; width: 160px; height: 160px; border-radius: 50%; background: conic-gradient(var(--color-primary) 3.6deg, #e0e0e0 0deg); display: flex; align-items: center; justify-content: center; transition: background 1s ease-out; }
+        .circular-progress::before { content: ""; position: absolute; width: 140px; height: 140px; border-radius: 50%; background-color: white; }
+        .score-value { position: relative; font-size: 2.5rem; font-weight: 800; color: var(--color-primary); z-index: 10; }
+        .score-label { position: relative; font-size: 0.875rem; color: var(--color-text-muted); z-index: 10; margin-top: -5px; }
+
+        .checklist-container { display: flex; flex-direction: column; gap: 1rem; margin: 2rem 0; text-align: left; }
+        .checklist-item { display: flex; align-items: center; padding: 1rem; background: white; border: 1px solid var(--color-border); border-radius: var(--radius-md); transition: all 0.2s; cursor: pointer; }
+        .checklist-item:hover { border-color: var(--color-primary); box-shadow: var(--shadow-sm); }
+        .checklist-item.checked { background-color: var(--color-primary-light); border-color: var(--color-primary); }
+        .checklist-checkbox { width: 20px; height: 20px; border: 2px solid var(--color-text-muted); border-radius: 4px; margin-right: 1rem; display: flex; align-items: center; justify-content: center; color: white; transition: all 0.2s; }
+        .checklist-item.checked .checklist-checkbox { background-color: var(--color-primary); border-color: var(--color-primary); }
+
+        .progress-section { background: var(--color-bg); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 2rem; }
+        .progress-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.875rem; font-weight: 600; }
+        .progress-track { height: 8px; background: var(--color-border); border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--color-success); width: 0%; transition: width 0.4s ease; }
+
+        .logo-text { font-family: 'Inter', system-ui, -apple-system, sans-serif; font-weight: 800; font-size: 2rem; letter-spacing: -0.04em; background: linear-gradient(135deg, #5B4CF5 0%, #9D4CF5 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; padding-bottom: 2px; }
+        .btn-back { position: absolute; top: 1.5rem; left: 1.5rem; display: flex; align-items: center; gap: 0.5rem; color: var(--color-text-muted); font-size: 0.875rem; padding: 0.5rem; margin-left: -0.5rem; transition: color 0.2s; }
+        
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); z-index: 100; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-content { background: white; width: 90%; max-width: 500px; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); transform: translateY(20px); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+
+        .income-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 2rem 0; }
+        .income-card { background: white; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1.5rem 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; transition: all 0.2s; }
+        .income-card:hover { border-color: var(--color-primary); box-shadow: var(--shadow-sm); }
+        .income-card h4 { margin: 0; font-size: 1rem; font-weight: 500; text-align: center; }
+        .btn-sm-primary { padding: 0.25rem 1rem; font-size: 0.875rem; border-radius: var(--radius-sm); background: var(--color-primary); color: white; border: none; cursor: pointer; transition: background 0.2s; }
+        .btn-sm-primary:hover { background: var(--color-primary-hover); }
+
+        .insight-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .insight-card { background: #f8fafc; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1.5rem; text-align: center; display: flex; flex-direction: column; justify-content: space-between; min-height: 180px; transition: transform 0.2s; }
+        .insight-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--color-primary-light); }
+        .insight-text { font-size: 1.125rem; font-weight: 500; color: var(--color-text-main); margin-bottom: 1rem; }
+        .btn-why { background: var(--color-primary-light); color: var(--color-primary); font-size: 0.875rem; font-weight: 600; padding: 0.5rem 1rem; border-radius: var(--radius-sm); border: none; cursor: pointer; align-self: center; }
+
+        .tracker-chart-container { display: flex; justify-content: space-around; align-items: flex-end; height: 250px; margin: 2rem 0; padding-bottom: 1rem; border-bottom: 1px solid var(--color-border); }
+        .bar-group { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; width: 60px; position: relative; }
+        .bar-value { font-size: 0.85rem; font-weight: 600; color: var(--color-text-main); margin-bottom: 0.5rem; }
+        .bar-fill { width: 100%; border-radius: var(--radius-sm) var(--radius-sm) 0 0; transition: height 1s cubic-bezier(0.4, 0, 0.2, 1); min-height: 4px; }
+        .bar-label { margin-top: 0.75rem; font-size: 0.85rem; color: var(--color-text-muted); font-weight: 500; }
+
+        @media (min-width: 768px) {
+            .card, .hero-card { padding: 3rem !important; }
+            .checklist-container, .income-grid, .insight-grid { display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 1.5rem !important; }
+            .checklist-container .progress-section { grid-column: 1 / -1; }
+            .hero-card { max-width: 1200px !important; margin: 0 auto; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="app" class="flex flex-col min-h-screen">
+        <!-- Header -->
+        <header class="card" style="border-radius: 0; border-left: 0; border-right: 0; border-top: 0; position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: blur(8px);">
+            <div class="container flex justify-between items-center py-4" style="max-width: 1000px; margin: 0 auto;">
+                <div class="flex items-center gap-4">
+                    <div style="width: 48px; height: 48px; background: var(--color-primary-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--color-primary);">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                        </svg>
+                    </div>
+                    <span class="logo-text">Taxly</span>
+                </div>
+                <button class="flex items-center justify-center" onclick="navigateTo('login')" style="width: 40px; height: 40px; border-radius: 50%; background: var(--color-bg); border: 1px solid var(--color-border); color: var(--color-text-muted); transition: color 0.2s;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main id="main-content" class="container flex-grow py-8 flex flex-col justify-center">
+
+            <!-- PAGE 1: Landing Page -->
+            <section id="page-landing" class="animate-fade-in">
+                <div class="hero-card">
+                    <h1 class="hero-title">Plan Your Tax in<br>10 Seconds</h1>
+                    <p class="hero-subtitle">See how much tax you can save this year with our advanced AI-powered engine.</p>
+                    <div class="flex justify-center gap-4 mb-4" style="flex-wrap: wrap;">
+                        <button id="btn-start-planner" class="btn btn-primary text-xl">
+                            Start Tax Planner
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 8px;">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                        <a href="https://www.indiainfoline.com/knowledge-center/tax-saving-tax-planning/why-early-tax-planning-is-important" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+                            Why plan tax early?
+                        </a>
+                    </div>
+                    <p class="text-xs text-muted text-center" style="opacity: 0.8; color: #fff;">No signup required &bull; Free forever</p>
+                </div>
+                <div class="flex justify-center gap-6 mt-8 text-muted items-center">
+                    <span class="text-xs font-bold uppercase tracking-widest opacity-60">Loved by 10,000+ Users</span>
+                </div>
+            </section>
+
+            <!-- PAGE 2: Quick Estimator -->
+            <section id="page-estimator" class="hidden animate-fade-in">
+                <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center;">
+                    <h2 class="text-3xl font-bold" style="margin-bottom: 0.5rem; color: var(--color-text-main);">Quick Tax Estimator</h2>
+                    <p class="text-muted" style="margin-bottom: 2rem;">Get your tax calculated in just 10 seconds. Just let us know your details.</p>
+
+                    <form id="form-estimator" onsubmit="event.preventDefault(); window.calculateAndNavigate();">
+                        <div class="form-group">
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="form-label" style="margin-bottom: 0;">Salary Range</label>
+                                <span id="salary-display" class="range-value">₹ 12,00,000</span>
+                            </div>
+                            <div class="range-container">
+                                <input type="range" id="input-salary" min="300000" max="5000000" step="100000" value="1200000">
+                                <div class="flex justify-between text-muted text-sm mt-1">
+                                    <span>₹3L</span>
+                                    <span>₹50L+</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Age Group</label>
+                            <select class="form-select" id="input-age">
+                                <option value="gen">Below 60 (General)</option>
+                                <option value="sen">60 - 80 (Senior Citizen)</option>
+                                <option value="sup">Above 80 (Super Senior)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">City (Metro/Non-Metro)</label>
+                            <select class="form-select" id="input-city">
+                                <option value="metro">Mumbai (Metro)</option>
+                                <option value="metro">Delhi (Metro)</option>
+                                <option value="metro">Bengaluru (Metro)</option>
+                                <option value="metro">Chennai (Metro)</option>
+                                <option value="metro">Kolkata (Metro)</option>
+                                <option value="non-metro">Other (Non-Metro)</option>
+                            </select>
+                        </div>
+
+                        <div style="margin-top: 2.5rem;">
+                            <button type="submit" class="btn btn-primary text-xl w-full" style="width: 100%;">Calculate Tax</button>
+                            <p class="text-xs text-muted" style="margin-top: 1rem; opacity: 0.8;">
+                                The Quick Tax Estimator provides an indicative estimate for user guidance and engagement. Final tax liability is calculated only after complete data collection and regime selection.
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- PAGE 3: Results -->
+            <section id="page-results" class="hidden animate-fade-in">
+                <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center; position: relative;">
+                    <button class="btn-back" onclick="goBack('estimator')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7" /></svg> Back
+                    </button>
+                    <h2 class="text-3xl font-bold" style="margin-bottom: 1.5rem;">Estimated Tax Plan</h2>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Estimated Tax Liability</div>
+                        <div class="stat-value" id="result-tax">₹ 0</div>
+                    </div>
+                    <div class="stat-card" style="border-color: var(--color-success); background: #f0fdf4;">
+                        <div class="stat-label" style="color: var(--color-success);">Potential Savings</div>
+                        <div class="stat-value highlight" id="result-savings">₹ 0</div>
+                    </div>
+                    <div class="score-container">
+                        <h3 class="text-xl" style="margin-bottom: 1rem;">Tax Efficiency Score</h3>
+                        <div class="circular-progress" id="score-circle">
+                            <div class="flex flex-col items-center">
+                                <span class="score-value" id="result-score">0</span>
+                                <span class="score-label">/ 100</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-muted" style="margin-bottom: 2rem;">To save more, complete your profile details.</p>
+                    <button class="btn btn-primary text-xl w-full" onclick="navigateTo('profile')">Improve My Tax Score</button>
+                </div>
+            </section>
+
+            <!-- PAGE 4: Profile Completion -->
+            <section id="page-profile" class="hidden animate-fade-in">
+                <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center; position: relative;">
+                    <button class="btn-back" onclick="goBack('results')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7" /></svg> Back
+                    </button>
+                    <h2 class="text-3xl font-bold" style="margin-bottom: 0.5rem;">Complete Your Tax Profile</h2>
+                    <p class="text-muted">Fill in the details to maximize your savings.</p>
+                    <a href="#" class="text-xs text-primary hover:underline mt-1 inline-block" style="color: var(--color-primary); margin-bottom: 1rem;">Why do we need these details?</a>
+
+                    <div class="checklist-container">
+                        <div class="checklist-item checked" onclick="alert('Salary details already provided in Step 2.')">
+                            <div class="checklist-checkbox">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <span class="text-xl" style="font-size: 1rem; font-weight: 500;">Salary details</span>
+                        </div>
+                        <div class="checklist-item" id="item-rent" onclick="openModal('rent')">
+                            <div class="checklist-checkbox" onclick="handleCheckboxClick('rent', event)">
+                                <svg class="check-icon hidden" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <span style="font-size: 1rem; font-weight: 500;">Rent (HRA)</span>
+                        </div>
+                        <div class="checklist-item" id="item-investments" onclick="openModal('investments')">
+                            <div class="checklist-checkbox" onclick="handleCheckboxClick('investments', event)">
+                                <svg class="check-icon hidden" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <span style="font-size: 1rem; font-weight: 500;">Investments (80C / ELSS)</span>
+                        </div>
+                        <div class="checklist-item" id="item-insurance" onclick="openModal('insurance')">
+                            <div class="checklist-checkbox" onclick="handleCheckboxClick('insurance', event)">
+                                <svg class="check-icon hidden" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <span style="font-size: 1rem; font-weight: 500;">Insurance (80D)</span>
+                        </div>
+                        <div class="checklist-item" id="item-other" onclick="openModal('other')">
+                            <div class="checklist-checkbox" onclick="handleCheckboxClick('other', event)">
+                                <svg class="check-icon hidden" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <span style="font-size: 1rem; font-weight: 500;">Other income</span>
+                        </div>
+                    </div>
+
+                    <div class="progress-section">
+                        <div class="progress-header">
+                            <span>Profile Strength</span>
+                            <span id="progress-text">1 of 5 completed</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="progress-bar" style="width: 20%;"></div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary text-xl w-full" onclick="navigateTo('income')">Next: Add Income Sources</button>
+                </div>
+            </section>
+
+            <!-- PAGE 5: Multi-Income Input -->
+            <section id="page-income" class="hidden animate-fade-in">
+                <div class="card" style="max-width: 700px; margin: 0 auto; text-align: center; position: relative;">
+                    <button class="btn-back" onclick="goBack('profile')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7" /></svg> Back
+                    </button>
+                    <h2 class="text-3xl font-bold" style="margin-bottom: 0.5rem;">Add Income Sources</h2>
+                    <p class="text-muted">Include all sources for accurate tax calculation.</p>
+                    <div class="income-grid">
+                        <div class="income-card">
+                            <h4>Salary</h4>
+                            <button id="btn-salary" class="btn-sm-primary" onclick="openModal('salary')">Edit</button>
+                        </div>
+                        <div class="income-card">
+                            <h4>Freelance / Consulting</h4>
+                            <button id="btn-freelance" class="btn-sm-primary" onclick="openModal('freelance')">Add / Edit</button>
+                        </div>
+                        <div class="income-card">
+                            <h4>Rental Income</h4>
+                            <button id="btn-rental_income" class="btn-sm-primary" onclick="openModal('rental_income')">Add / Edit</button>
+                        </div>
+                        <div class="income-card">
+                            <h4>Capital Gains</h4>
+                            <button id="btn-capital_gains" class="btn-sm-primary" onclick="openModal('capital_gains')">Add / Edit</button>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary text-xl w-full" onclick="calculateTotalAndShowInsights()">Update Tax Calculation</button>
+                </div>
+            </section>
+
+            <!-- PAGE 5.5: Optimized Results -->
+            <section id="page-optimized-results" class="hidden animate-fade-in">
+                <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center; position: relative;">
+                    <button class="btn-back" onclick="goBack('income')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7" /></svg> Back
+                    </button>
+                    <h2 class="text-3xl font-bold" style="margin-bottom: 1.5rem;">Your Optimized Tax Plan</h2>
+
+                    <div style="text-align: left; margin-bottom: 1.5rem; background: var(--color-bg); padding: 1rem; border-radius: 8px;">
+                        <div class="flex justify-between text-muted text-sm mb-1">
+                            <span>Gross Income</span>
+                            <span id="opt-gross" style="font-weight: 600;">₹ 0</span>
+                        </div>
+                        <div class="flex justify-between text-muted text-sm mb-1">
+                            <span>Standard Deduction</span>
+                            <span class="text-green-600">- ₹ 75,000</span>
+                        </div>
+                        <div class="flex justify-between text-muted text-sm mb-1">
+                            <span>Declared Deductions</span>
+                            <span id="opt-deductions" class="text-green-600">- ₹ 0</span>
+                        </div>
+                        <div class="flex justify-between text-sm mt-2 pt-2" style="border-top: 1px solid var(--color-border); font-weight: 600;">
+                            <span>Net Taxable Income</span>
+                            <span id="opt-taxable">₹ 0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Optimized Tax Liability</div>
+                        <div class="stat-value" id="opt-tax">₹ 0</div>
+                    </div>
+                    <div class="stat-card" style="border-color: var(--color-success); background: #f0fdf4;">
+                        <div class="stat-label" style="color: var(--color-success);">Total Savings</div>
+                        <div class="stat-value highlight" id="opt-savings">₹ 0</div>
+                    </div>
+                    <div class="score-container">
+                        <h3 class="text-xl" style="margin-bottom: 1rem;">Optimization Score</h3>
+                        <div class="circular-progress" id="opt-score-circle">
+                            <div class="flex flex-col items-center">
+                                <span class="score-value" id="opt-score">0</span>
+                                <span class="score-label">/ 100</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary text-xl w-full" onclick="renderInsightsAndNavigate()">View Detailed Insights</button>
+                </div>
+            </section>
+
+            <!-- PAGE 6: Tax Insights -->
+            <section id="page-insights" class="hidden animate-fade-in">
+                <div class="card" style="max-width: 800px; margin: 0 auto; text-align: center; position: relative;">
+                    <button class="btn-back" onclick="goBack('optimized-results')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7" /></svg> Back
+                    </button>
+                    <h2 class="text-3xl" style="margin-bottom: 0.5rem;">Your Tax Insights</h2>
+                    <p class="text-muted">Personalized analysis based on your new income inputs.</p>
+                    <div class="insight-grid">
+                        <!-- Dynamic Insights will appear here -->
+                    </div>
+                    <button class="btn btn-primary text-xl w-full mt-4" onclick="loadTrackerAndNavigate()">View Monthly Tracker</button>
+                </div>
+            </section>
+
+            <!-- PAGE 7: Monthly Tax Tracker -->
+            <section id="page-tracker" class="hidden animate-fade-in">
+                <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center; position: relative;">
+                    <button class="btn-back" onclick="goBack('insights')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7" /></svg> Back
+                    </button>
+                    <h2 class="text-3xl font-bold" style="margin-bottom: 2rem;">Tax Tracker</h2>
+                    <div class="tracker-chart-container">
+                        <div class="bar-group">
+                            <div class="bar-value" id="tracker-val-tax">₹0</div>
+                            <div class="bar-fill" id="bar-tax" style="height: 40%; background: var(--color-error);"></div>
+                            <div class="bar-label">Est. Tax</div>
+                        </div>
+                        <div class="bar-group">
+                            <div class="bar-value" id="tracker-val-deductions">₹0</div>
+                            <div class="bar-fill" id="bar-deductions" style="height: 60%; background: var(--color-success);"></div>
+                            <div class="bar-label">Deductions</div>
+                        </div>
+                        <div class="bar-group">
+                            <div class="bar-value" id="tracker-val-potential">₹0</div>
+                            <div class="bar-fill" id="bar-potential" style="height: 20%; background: var(--color-warning);"></div>
+                            <div class="bar-label">Potential</div>
+                        </div>
+                    </div>
+                    <div class="score-container" style="margin-top: 3rem;">
+                        <h3 class="text-xl" style="margin-bottom: 1rem;">Current Tax Score</h3>
+                        <div class="circular-progress" id="tracker-score-circle">
+                            <div class="flex flex-col items-center">
+                                <span class="score-value" id="tracker-score">0</span>
+                                <span class="score-label">/ 100</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem;">
+                        <div id="tracker-potential-text" class="text-xl font-bold text-center hidden" style="color: var(--color-primary);">
+                            You can still save <span id="tracker-potential-amount">₹0</span> this year
+                        </div>
+                        <button id="btn-tracker-recommend" class="btn btn-primary text-xl w-full hidden" onclick="loadRecommendationsAndNavigate()">
+                            View Recommendations ->
+                        </button>
+                        <button id="btn-tracker-add-details" class="btn btn-white w-full hidden" style="border: 1px solid var(--color-primary);" onclick="navigateTo('profile')">
+                            Add Missing Details
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE 8: Contextual Monetisation -->
+            <section id="page-monetisation" class="hidden animate-fade-in">
+                <div class="card" style="max-width: 600px; margin: 0 auto; min-height: 80vh; position: relative;">
+                    <button class="btn-back" onclick="goBack('tracker')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7" /></svg> Back
+                    </button>
+                    <div class="text-center mb-8 mt-4">
+                        <h2 class="text-3xl font-bold mb-2">Recommended Next Steps</h2>
+                        <p class="text-muted">Based on your tax profile and remaining savings potential</p>
+                    </div>
+                    <div id="recommendation-grid" class="flex flex-col gap-6">
+                        <!-- Dynamic Cards will be injected here -->
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- GENERIC INPUT MODAL -->
+        <div id="input-modal" class="modal-overlay">
+            <div class="modal-content">
+                <h3 id="modal-title" class="text-2xl" style="margin-bottom: 1rem;">Add Details</h3>
+                <form onsubmit="saveModalDetails(event)">
+                    <div class="form-group">
+                        <label id="modal-label" class="form-label">Amount</label>
+                        <input type="number" id="modal-input" class="form-control" placeholder="Enter amount in ₹" required>
+                    </div>
+                    <div class="flex gap-4 justify-end" style="margin-top: 2rem;">
+                        <button type="button" class="btn text-muted" onclick="closeModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Details</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <footer class="py-6 text-center text-muted" style="border-top: 1px solid var(--color-border); margin-top: auto;">
+            <p class="text-sm">© 2026 Toshika Kamble</p>
+        </footer>
+    </div>
+
+    <!-- Embedded Scripts -->
+    <script>
+        const state = {
+            currentStep: 0, salary: 1200000, freelance: 0, rental_income: 0,
+            capital_gains: 0, other: 0, rent: 0, investments: 0, insurance: 0,
+            age: 'gen', city: 'metro'
+        };
+
+        const profileState = {
+            salary: true, rent: false, investments: false, insurance: false, other: false
+        };
+
+        let currentModalType = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const startBtn = document.getElementById('btn-start-planner');
+            if (startBtn) startBtn.addEventListener('click', () => navigateTo('estimator'));
+            
+            const salaryInput = document.getElementById('input-salary');
+            const salaryDisplay = document.getElementById('salary-display');
+            if (salaryInput && salaryDisplay) {
+                salaryInput.addEventListener('input', (e) => {
+                    const val = parseInt(e.target.value);
+                    state.salary = val;
+                    salaryDisplay.textContent = '₹ ' + val.toLocaleString('en-IN');
+                });
+            }
+        });
+
+        function calculateSlabTax(income) {
+            let tax = 0;
+            if (income > 1500000) tax += (income - 1500000) * 0.3;
+            if (income > 1200000) tax += (Math.min(income, 1500000) - 1200000) * 0.2;
+            if (income > 900000) tax += (Math.min(income, 1200000) - 900000) * 0.15;
+            if (income > 600000) tax += (Math.min(income, 900000) - 600000) * 0.1;
+            if (income > 300000) tax += (Math.min(income, 600000) - 300000) * 0.05;
+            return tax;
+        }
+
+        function getMarginalRate(income) {
+            if (income > 1500000) return 0.3;
+            if (income > 1200000) return 0.2;
+            if (income > 900000) return 0.15;
+            if (income > 600000) return 0.1;
+            return 0.05;
+        }
+
+        function computeTaxProfile(userData) {
+            const salary = userData.salary.amount;
+            const stdDed = 75000;
+            const taxableSalaryBase = Math.max(0, salary - stdDed);
+            let baseTax = calculateSlabTax(taxableSalaryBase) * 1.04;
+            let optimisedTax = baseTax, totalSavings = 0, taxScore = 0, totalDeductions = 0;
+
+            if (salary > 0) taxScore += 25;
+            if (userData.hra && userData.hra.monthlyRent > 0) {
+                const annualRent = userData.hra.monthlyRent * 12;
+                taxScore += (annualRent >= 240000 ? 20 : annualRent >= 120000 ? 15 : annualRent >= 60000 ? 10 : 5);
+                const hraSaving = Math.min(annualRent * 0.30 * getMarginalRate(salary), 60000);
+                optimisedTax -= hraSaving; totalSavings += hraSaving; totalDeductions += hraSaving;
+            }
+            if (userData.investments && userData.investments.amount > 0) {
+                const invAmt = userData.investments.amount;
+                taxScore += (invAmt >= 150000 ? 20 : invAmt >= 100000 ? 15 : invAmt >= 50000 ? 10 : 5);
+                const invSaving = Math.min(invAmt * getMarginalRate(salary), 60000);
+                optimisedTax -= invSaving; totalSavings += invSaving; totalDeductions += invSaving;
+            }
+            if (userData.insurance && userData.insurance.premium > 0) {
+                const premium = userData.insurance.premium;
+                taxScore += (premium >= 25000 ? 15 : premium >= 15000 ? 10 : 5);
+                const insSaving = Math.min(premium * 0.20, 25000);
+                optimisedTax -= insSaving; totalSavings += insSaving; totalDeductions += insSaving;
+            }
+            if (userData.otherIncome && (userData.otherIncome.status === "added" || userData.otherIncome.status === "none")) taxScore += 20;
+
+            optimisedTax = Math.max(optimisedTax, baseTax * 0.4);
+            taxScore = Math.min(Math.round(taxScore), 100);
+            
+            let efficiencyScore = 10;
+            if (salary > 0) {
+                const taxRatio = optimisedTax / salary;
+                efficiencyScore = Math.max(10, 100 - Math.round(taxRatio * 200));
+            }
+            return { baseTax: Math.round(baseTax), optimisedTax: Math.round(optimisedTax), totalSavings: Math.round(totalSavings), totalDeductions: Math.round(totalDeductions), taxScore, efficiencyScore };
+        }
+
+        function calculateNewRegime(salary) {
+            const standardDeduction = 75000;
+            const taxableIncome = Math.max(0, salary - standardDeduction);
+            if (taxableIncome <= 700000) return 0;
+            let tax = 0;
+            if (taxableIncome > 1500000) tax += (taxableIncome - 1500000) * 0.30;
+            if (taxableIncome > 1200000) tax += Math.min(taxableIncome - 1200000, 300000) * 0.20;
+            if (taxableIncome > 1000000) tax += Math.min(taxableIncome - 1000000, 200000) * 0.15;
+            if (taxableIncome > 700000) tax += Math.min(taxableIncome - 700000, 300000) * 0.10;
+            if (taxableIncome > 300000) tax += Math.min(taxableIncome - 300000, 400000) * 0.05;
+            if (taxableIncome > 700000 && taxableIncome <= 727777) tax = Math.min(tax, taxableIncome - 700000);
+            return tax * 1.04; 
+        }
+
+        function calculateOldRegime(salary, ageGroup = 'gen') {
+            const standardDeduction = 50000;
+            const taxableIncome = Math.max(0, salary - standardDeduction);
+            if (taxableIncome <= 500000) return 0;
+            let basicExemption = 250000;
+            if (ageGroup === 'sen') basicExemption = 300000;
+            if (ageGroup === 'sup') basicExemption = 500000;
+            let tax = 0;
+            if (taxableIncome > 1000000) {
+                tax += (taxableIncome - 1000000) * 0.30 + (1000000 - 500000) * 0.20 + (500000 - basicExemption) * 0.05;
+            } else if (taxableIncome > 500000) {
+                tax += (taxableIncome - 500000) * 0.20 + (500000 - basicExemption) * 0.05;
+            } else if (taxableIncome > basicExemption) {
+                tax += (taxableIncome - basicExemption) * 0.05;
+            }
+            return tax * 1.04;
+        }
+
+        window.calculateAndNavigate = function () {
+            const salary = state.salary;
+            const age = document.getElementById('input-age').value;
+            state.age = age;
+            const taxNew = Math.round(calculateNewRegime(salary));
+            const taxOld = Math.round(calculateOldRegime(salary, age));
+            
+            let displayedTax = taxNew, savings = 0;
+            if (taxNew < taxOld) { displayedTax = taxNew; savings = taxOld - taxNew; }
+            else { displayedTax = taxOld; savings = taxNew - taxOld; }
+            
+            let taxRatio = salary > 0 ? displayedTax / salary : 0;
+            let score = Math.max(10, 100 - Math.round(taxRatio * 200));
+            
+            document.getElementById('result-tax').textContent = '₹ ' + displayedTax.toLocaleString('en-IN');
+            document.getElementById('result-savings').textContent = '₹ ' + savings.toLocaleString('en-IN');
+            document.getElementById('result-score').textContent = score;
+            document.getElementById('score-circle').style.background = `conic-gradient(var(--color-primary) ${score * 3.6}deg, #e0e0e0 0deg)`;
+            
+            navigateTo('results');
+        };
+
+        window.calculateTotalAndShowInsights = function () {
+            const userData = {
+                salary: { amount: state.salary, employerType: true },
+                hra: { monthlyRent: state.rent / 12 },
+                investments: { amount: state.investments },
+                insurance: { premium: state.insurance },
+                otherIncome: { status: profileState.other ? "added" : "null" }
+            };
+            const result = computeTaxProfile(userData);
+            
+            document.getElementById('opt-gross').textContent = '₹ ' + state.salary.toLocaleString('en-IN');
+            document.getElementById('opt-deductions').textContent = '- ₹ ' + result.totalDeductions.toLocaleString('en-IN');
+            document.getElementById('opt-taxable').textContent = '₹ ' + Math.max(0, state.salary - 75000 - result.totalDeductions).toLocaleString('en-IN');
+            document.getElementById('opt-tax').textContent = '₹ ' + result.optimisedTax.toLocaleString('en-IN');
+            document.getElementById('opt-savings').textContent = '₹ ' + result.totalSavings.toLocaleString('en-IN');
+            document.getElementById('opt-score').textContent = result.efficiencyScore;
+            document.getElementById('opt-score-circle').style.background = `conic-gradient(var(--color-primary) ${result.efficiencyScore * 3.6}deg, #e0e0e0 0deg)`;
+            
+            navigateTo('optimized-results');
+        };
+
+        function generateInsights(userData, taxProfile, taxNew, taxOld) {
+            const cards = [];
+            const salary = userData.salary.amount;
+            const annualRent = userData.hra.monthlyRent * 12;
+            const investments = userData.investments.amount;
+            const insurance = userData.insurance.premium;
+
+            if (salary > 500000 && investments < 150000) {
+                cards.push({ text: `Save ₹${((150000 - investments) * 0.3).toLocaleString('en-IN')} more<br>under 80C`, why: `You have ₹${(150000 - investments).toLocaleString('en-IN')} unused limit in Section 80C.` });
+            }
+            if (annualRent > 0 && salary > 0 && annualRent >= 100000) {
+                cards.push({ text: 'HRA optimisation<br>possible', why: 'Your rent is high enough to potentially claim more exemptions.' });
+            }
+            const regimeDiff = Math.abs(taxNew - taxOld);
+            if (regimeDiff > 5000) {
+                cards.push({ text: `${taxNew < taxOld ? "New" : "Old"} regime saves<br>₹${regimeDiff.toLocaleString('en-IN')}`, why: `Based on your income, the ${taxNew < taxOld ? "New" : "Old"} Regime offers lower liability.` });
+            }
+            if (cards.length === 0) cards.push({ text: 'Review your profile<br>for more savings', why: 'Adding more details helps us find savings.' });
+            
+            return cards.slice(0, 3);
+        }
+
+        window.renderInsightsAndNavigate = function () {
+            const totalIncome = state.salary + state.freelance + state.rental_income + state.capital_gains + state.other;
+            const userData = {
+                salary: { amount: state.salary, employerType: true },
+                hra: { monthlyRent: state.rent / 12 },
+                investments: { amount: state.investments },
+                insurance: { premium: state.insurance },
+                otherIncome: { status: profileState.other ? "added" : "null" }
+            };
+            const taxProfile = computeTaxProfile(userData);
+            const taxNew = calculateNewRegime(totalIncome);
+            const taxOld = calculateOldRegime(totalIncome, state.age);
+            
+            const cards = generateInsights(userData, taxProfile, taxNew, taxOld);
+            const grid = document.querySelector('#page-insights .insight-grid');
+            if (grid) {
+                grid.innerHTML = '';
+                cards.forEach(card => {
+                    grid.innerHTML += `<div class="insight-card"><div class="insight-text">${card.text}</div><button class="btn-why" onclick="alert('${card.why}')">Why?</button></div>`;
+                });
+            }
+            navigateTo('insights');
+        };
+
+        window.loadTrackerAndNavigate = function () {
+            const userData = {
+                salary: { amount: state.salary, employerType: true },
+                hra: { monthlyRent: state.rent / 12 },
+                investments: { amount: state.investments },
+                insurance: { premium: state.insurance },
+                otherIncome: { status: profileState.other ? "added" : "null" }
+            };
+            const profile = computeTaxProfile(userData);
+            const valTax = profile.optimisedTax;
+            const valDeductions = profile.totalSavings;
+            const valPotential = Math.max(Math.round(userData.salary.amount * 0.25 * getMarginalRate(userData.salary.amount)) - valDeductions, 0);
+            const maxValue = Math.max(valTax, valDeductions, valPotential, 10000);
+            
+            const formatK = num => num >= 100000 ? '₹' + (num / 100000).toFixed(1) + 'L' : (num >= 1000 ? '₹' + (num / 1000).toFixed(0) + 'k' : '₹' + num);
+            
+            document.getElementById('tracker-val-tax').textContent = formatK(valTax);
+            document.getElementById('tracker-val-deductions').textContent = formatK(valDeductions);
+            document.getElementById('tracker-val-potential').textContent = formatK(valPotential);
+            
+            document.getElementById('bar-tax').style.height = `${(valTax / maxValue) * 100}%`;
+            document.getElementById('bar-deductions').style.height = `${(valDeductions / maxValue) * 100}%`;
+            document.getElementById('bar-potential').style.height = `${(valPotential / maxValue) * 100}%`;
+            
+            document.getElementById('tracker-score').textContent = profile.taxScore;
+            document.getElementById('tracker-score-circle').style.background = `conic-gradient(var(--color-primary) ${profile.taxScore * 3.6}deg, #e0e0e0 0deg)`;
+            
+            if (valPotential > 0) {
+                document.getElementById('btn-tracker-recommend').classList.remove('hidden');
+                document.getElementById('tracker-potential-text').classList.remove('hidden');
+                document.getElementById('tracker-potential-amount').textContent = formatK(valPotential);
+            }
+            if (profile.taxScore < 80) document.getElementById('btn-tracker-add-details').classList.remove('hidden');
+            
+            navigateTo('tracker');
+        };
+
+        window.loadRecommendationsAndNavigate = function () {
+            const userData = { salary: { amount: state.salary, employerType: true } };
+            const margin = getMarginalRate(state.salary);
+            const grid = document.getElementById('recommendation-grid');
+            grid.innerHTML = '';
+            
+            const recs = [];
+            if (state.salary > 500000 && state.investments < 150000) {
+                recs.push({ title: `Save ₹${Math.round((150000 - state.investments) * margin).toLocaleString()} with ELSS`, desc: "Tax-saving mutual funds with lowest lock-in period (3 yrs).", cta: "Explore ELSS Funds" });
+            }
+            if (state.salary > 1000000) {
+                recs.push({ title: `Save ₹${Math.round(50000 * margin).toLocaleString()} extra via NPS`, desc: "Exclusive ₹50k deduction over and above 80C limit.", cta: "Learn about NPS" });
+            }
+            if (state.insurance < 25000) {
+                recs.push({ title: "Protect health & save tax", desc: "Claim up to ₹25,000 deduction on health insurance premiums.", cta: "Get Health Quote" });
+            }
+            
+            if (recs.length === 0) grid.innerHTML = '<div class="text-center p-4 text-muted">No specific recommendations available right now. Great job on your planning!</div>';
+            else {
+                recs.forEach(rec => {
+                    grid.innerHTML += `<div class="p-6 rounded-xl border border-gray-200 shadow-sm" style="background:#f8fafc; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; border: 1px solid var(--color-border); text-align:left;">
+                        <h3 class="text-xl font-bold mb-2">${rec.title}</h3>
+                        <p class="text-muted mb-4">${rec.desc}</p>
+                        <button class="btn btn-primary" onclick="alert('Redirecting...')">${rec.cta}</button>
+                    </div>`;
+                });
+            }
+            navigateTo('monetisation');
+        };
+
+        window.goBack = function (targetPage) { navigateTo(targetPage); };
+
+        window.openModal = function (type, event) {
+            if (profileState[type] && event && event.target.closest('.checklist-checkbox')) {
+                profileState[type] = false;
+                if (state.hasOwnProperty(type)) state[type] = 0;
+                document.getElementById(`item-${type}`).classList.remove('checked');
+                document.getElementById(`item-${type}`).querySelector('.check-icon').classList.add('hidden');
+                updateProgress();
+                return;
+            }
+            currentModalType = type;
+            document.getElementById('modal-title').textContent = 'Enter Details';
+            document.getElementById('modal-input').value = state[type] && state[type] > 0 ? state[type] : '';
+            document.getElementById('input-modal').classList.add('active');
+            setTimeout(() => document.getElementById('modal-input').focus(), 100);
+        };
+
+        window.closeModal = function () {
+            document.getElementById('input-modal').classList.remove('active');
+            currentModalType = null;
+        };
+
+        window.saveModalDetails = function (e) {
+            e.preventDefault();
+            if (!currentModalType) return;
+            const val = document.getElementById('modal-input').value;
+            const amountVal = val ? parseInt(val) : 0;
+            
+            if (currentModalType === 'salary') state.salary = amountVal;
+            else if (state.hasOwnProperty(currentModalType)) state[currentModalType] = amountVal;
+            
+            profileState[currentModalType] = true;
+            const itemRow = document.getElementById(`item-${currentModalType}`);
+            if (itemRow) {
+                itemRow.classList.add('checked');
+                itemRow.querySelector('.check-icon').classList.remove('hidden');
+            }
+            const btn = document.getElementById(`btn-${currentModalType}`);
+            if (btn) {
+                btn.textContent = `₹ ${amountVal.toLocaleString('en-IN')}`;
+                btn.style.background = 'var(--color-success)';
+                btn.style.borderColor = 'var(--color-success)';
+            }
+            updateProgress();
+            closeModal();
+        };
+
+        function updateProgress() {
+            const completed = Object.values(profileState).filter(Boolean).length;
+            document.getElementById('progress-text').textContent = `${completed} of 5 completed`;
+            document.getElementById('progress-bar').style.width = `${(completed / 5) * 100}%`;
+        }
+
+        function navigateTo(pageId) {
+            document.querySelectorAll('main > section').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(`page-${pageId}`);
+            if (target) target.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
